@@ -1,33 +1,3 @@
-"""
-main.py — Agentic RAG with Real-Time Multi-Tool Intelligence
-
-Entry point for the Agentic RAG system powered by Groq API.
-Assembles the complete pipeline:
-  knowledge base indexing (FAISS) → tool registry → agent reasoning → interactive Q&A.
-
-Usage examples:
-    # Launch interactive Streamlit Web UI
-    python main.py --ui
-
-    # Interactive multi-turn CLI session
-    python main.py --interactive
-
-    # Single query execution
-    python main.py --query "What is AAPL's current stock price and internal valuation?"
-
-    # Use a custom knowledge base directory
-    python main.py --kb-dir /path/to/docs --interactive
-
-    # Select a specific Groq model
-    python main.py --interactive --model llama-3.1-8b-instant
-
-    # Disable conversation memory (stateless mode)
-    python main.py --interactive --no-memory
-
-    # Hide intermediate reasoning traces
-    python main.py --query "Weather in Tokyo" --no-verbose
-"""
-
 import argparse
 import os
 import subprocess
@@ -58,21 +28,10 @@ try:
 except ImportError:
     _HAS_RICH = False
     _console = None
-
-
-# ---------------------------------------------------------------------------
-# Helpers & Startup Display
-# ---------------------------------------------------------------------------
-
 def _check_api_keys(config: dict) -> bool:
-    """
-    Print an informative startup banner showing available tools and integrations.
-    Returns True if a Groq API key is detected, False for simulation mode.
-    """
     groq_key = config.get("groq_api_key")
     tavily_key = config.get("tavily_api_key")
     owm_key = config.get("openweathermap_api_key")
-
     has_llm = bool(groq_key)
 
     if _HAS_RICH and _console is not None:
@@ -164,7 +123,6 @@ def _build_config() -> dict:
         "domain_description":      "internal company documents, valuation forecasts, and policies",
     }
 
-
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Agentic RAG with Groq API and real-time tools (finance, weather, web search, Wikipedia).",
@@ -221,12 +179,6 @@ def _parse_args() -> argparse.Namespace:
         help="Hide the agent's reasoning trace.",
     )
     return parser.parse_args()
-
-
-# ---------------------------------------------------------------------------
-# Main Pipeline
-# ---------------------------------------------------------------------------
-
 def main() -> None:
     args = _parse_args()
 
