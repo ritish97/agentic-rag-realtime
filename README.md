@@ -71,42 +71,6 @@ Includes both a **modern, interactive Web Application** (Streamlit) and an **enh
 
 ---
 
-## 🚀 Quickstart
-
-### 1. Installation
-
-```bash
-git clone <repository-url>
-cd 05-agentic-rag-realtime
-
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate        # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Configure Environment (Optional)
-
-```bash
-cp .env.example .env
-# Edit .env with your keys (Groq, Tavily, OpenWeatherMap)
-```
-
-Sample `.env` contents:
-```env
-GROQ_API_KEY=your_groq_api_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
-TAVILY_API_KEY=your_tavily_api_key_here
-OPENWEATHERMAP_API_KEY=your_openweathermap_key_here
-KNOWLEDGE_BASE_DIR=data/knowledge_base
-```
-
-> **Note:** The system includes a high-fidelity **Interactive Simulation Mode** that runs out of the box with zero external API keys! All real tools (FAISS index, live Yahoo Finance stock lookups, and Wikipedia) execute natively. Adding a `GROQ_API_KEY` (free from [console.groq.com/keys](https://console.groq.com/keys)) activates full autonomous LLM tool calling.
-
----
-
 ## 🖥️ User Interfaces
 
 ### 🌟 1. Interactive Web Application (Streamlit)
