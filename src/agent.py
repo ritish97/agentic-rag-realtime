@@ -1,36 +1,17 @@
-"""
-src/agent.py
-
-Assembles the LangChain agent executor that ties together the Groq LLM,
-real-time tools, and conversation memory.
-
-THE AGENTIC RAG LOOP:
-    Every time the agent receives a question it cycles through:
-      1. REASON  — LLM analyzes question intent and decides which tool(s) to call
-                   using native function calling.
-      2. ACT     — The selected tool executes with structured arguments.
-      3. OBSERVE — The observation/result is returned into context.
-      4. REPEAT  — The agent reflects on observations; loops until sufficient evidence
-                   is gathered to produce a cited, definitive answer.
-"""
-
 import re
 import sys
 from typing import List, Optional, Any, Dict
 from collections import deque
-
 if sys.platform == "win32":
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
-
 try:
     from langchain.agents import AgentExecutor, create_tool_calling_agent
 except ImportError:
     from langchain_classic.agents import AgentExecutor, create_tool_calling_agent  # type: ignore
-
 try:
     from langchain.memory import ConversationBufferWindowMemory
 except ImportError:
@@ -38,7 +19,6 @@ except ImportError:
         from langchain_classic.memory import ConversationBufferWindowMemory  # type: ignore
     except ImportError:
         ConversationBufferWindowMemory = None  # type: ignore
-
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.tools import Tool
 from langchain_core.agents import AgentAction
@@ -65,13 +45,7 @@ Think step by step before invoking tools."""
 
 
 class SimulatedAgentExecutor:
-    """
-    High-fidelity interactive simulator that executes real tools and produces
-    grounded multi-step reasoning traces even when an external LLM API key
-    is not configured.
-    """
-
-    def __init__(self, tools: List[Tool], memory: bool = True, verbose: bool = True):
+   def __init__(self, tools: List[Tool], memory: bool = True, verbose: bool = True):
         self.tools = {t.name: t for t in tools}
         self.memory_enabled = memory
         self.verbose = verbose
@@ -249,28 +223,12 @@ class SimulatedAgentExecutor:
             "intermediate_steps": intermediate_steps,
         }
 
-
 def create_agent(
     tools: List[Tool],
     llm: Optional[Any] = None,
     memory: bool = True,
     verbose: bool = True,
 ) -> Any:
-    """
-    Build and return an agent executor wired to the provided tools.
-
-    If `llm` is None or 'simulation', returns a SimulatedAgentExecutor that
-    executes tools natively without requiring external API keys.
-
-    Args:
-        tools:   List of LangChain Tool objects from tool_registry.
-        llm:     An instantiated ChatGroq model or None.
-        memory:  If True, enables sliding-window conversation memory.
-        verbose: If True, prints reasoning traces to stdout.
-
-    Returns:
-        A configured AgentExecutor or SimulatedAgentExecutor.
-    """
     if llm is None or getattr(llm, "is_mock", False) or str(llm).lower() == "simulation":
         return SimulatedAgentExecutor(tools=tools, memory=memory, verbose=verbose)
 
@@ -310,11 +268,7 @@ def create_agent(
     agent_executor = AgentExecutor(**agent_kwargs)
     return agent_executor
 
-
 def run_agent_query(query: str, agent: Any) -> str:
-    """
-    Submit a query to the agent and return the final answer string.
-    """
     try:
         result = agent.invoke({"input": query})
         return result.get("output", str(result))
