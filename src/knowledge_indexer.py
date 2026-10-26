@@ -1,14 +1,5 @@
-"""
-src/knowledge_indexer.py
-
-Indexes documents into a FAISS vector store for semantic similarity retrieval.
-Acts as the knowledge retrieval engine for the Agentic RAG system, enabling
-the agent to ground its reasoning in private enterprise documentation.
-"""
-
 import os
 from typing import List, Dict, Any, Optional
-
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import (
@@ -16,22 +7,13 @@ from langchain_community.document_loaders import (
     TextLoader,
     DirectoryLoader,
 )
-
 try:
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 except ImportError:
     from langchain.text_splitter import RecursiveCharacterTextSplitter  # type: ignore
 
-
-# ---------------------------------------------------------------------------
-# Embedding model: sentence-transformers/all-MiniLM-L6-v2
-# A lightweight, highly efficient local embedding model that runs entirely on CPU.
-# Avoids external embedding API costs and ensures private document confidentiality.
-# ---------------------------------------------------------------------------
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 _CACHED_EMBEDDINGS: Optional[HuggingFaceEmbeddings] = None
-
-
 def _get_embeddings() -> HuggingFaceEmbeddings:
     """Return a cached HuggingFace embedding model instance."""
     global _CACHED_EMBEDDINGS
@@ -48,14 +30,7 @@ def _get_embeddings() -> HuggingFaceEmbeddings:
             )
     return _CACHED_EMBEDDINGS
 
-
 def get_indexed_documents_info(kb_dir: str) -> List[Dict[str, Any]]:
-    """
-    Inspect the knowledge base directory and return metadata for all supported files.
-
-    Returns:
-        List of dicts with: name, path, size_kb, extension, modified_time
-    """
     if not os.path.exists(kb_dir):
         return []
 
@@ -88,22 +63,6 @@ def index_knowledge_base(
     index_path: str = "kb_faiss_index",
     force_reindex: bool = False,
 ) -> FAISS:
-    """
-    Load every .pdf, .txt, and .md file from kb_dir, chunk the text, build a FAISS
-    vector index, and persist it to disk.
-
-    If the index already exists on disk it is loaded directly — re-indexing is
-    skipped so the agent starts up fast after the first run.
-
-    Args:
-        kb_dir:         Directory containing source documents (.pdf, .txt, .md).
-        index_path:     Path where the FAISS index folder will be saved.
-        force_reindex:  If True, forces rebuilding even if index files exist.
-
-    Returns:
-        A ready-to-query FAISS vector store.
-    """
-    # If the index was already built and not forced, load it and return immediately.
     if os.path.exists(index_path) and not force_reindex:
         try:
             print(f"[Indexer] Loading existing FAISS index from '{index_path}'")
@@ -181,17 +140,7 @@ def index_knowledge_base(
 
     return vector_store
 
-
 def load_index(index_path: str) -> FAISS:
-    """
-    Load a previously saved FAISS index from disk.
-
-    Args:
-        index_path: Path to the directory created by FAISS.save_local().
-
-    Returns:
-        Loaded FAISS vector store ready for similarity search.
-    """
     embeddings = _get_embeddings()
     vector_store = FAISS.load_local(
         index_path,
@@ -207,17 +156,6 @@ def search_knowledge_base_with_metadata(
     vector_store: FAISS,
     k: int = 3,
 ) -> List[Dict[str, Any]]:
-    """
-    Perform a similarity search and return chunks with their document source metadata.
-
-    Args:
-        query:        Natural-language search query.
-        vector_store: Loaded FAISS index.
-        k:            Number of top results to return.
-
-    Returns:
-        List of dicts: [{"content": str, "source": str, "score": Optional[float]}]
-    """
     results = []
     try:
         # Use similarity_search_with_score if available
@@ -239,16 +177,10 @@ def search_knowledge_base_with_metadata(
                 "score": None,
             })
     return results
-
-
 def search_knowledge_base(
     query: str,
     vector_store: FAISS,
     k: int = 3,
 ) -> List[str]:
-    """
-    Perform a similarity search and return top-k text strings.
-    Maintains backward compatibility with rag_tool.py.
-    """
     items = search_knowledge_base_with_metadata(query, vector_store, k=k)
     return [f"[{item['source']}] {item['content']}" for item in items]
