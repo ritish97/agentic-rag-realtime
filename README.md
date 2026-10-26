@@ -1,3 +1,4 @@
+Live demo : https://agentic-rag-realtime-3dq8avc99xutruhff4f8pq.streamlit.app/
 # Agentic RAG with Real-Time Multi-Tool Intelligence
 
 An autonomous Agentic RAG system powered by the **Groq API** (LPU Inference Engine) that dynamically decides **which tool to activate** for every question — retrieving private enterprise knowledge via local FAISS vector search, fetching live stock metrics from Yahoo Finance, checking real-time weather observations, looking up Wikipedia definitions, or crawling the live web.
