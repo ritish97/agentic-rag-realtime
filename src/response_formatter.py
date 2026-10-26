@@ -1,27 +1,11 @@
-"""
-src/response_formatter.py
-
-Formats the agent's raw output and reasoning traces into structured, readable displays
-for both standard terminals and rich console outputs.
-
-BENEFITS OF STRUCTURED FORMATTING:
-    • Transparency: Users see whether an answer originated from live market data,
-      internal enterprise documents, encyclopaedic resources, or live web search.
-    • Provenance: Surfacing tools and source metadata enables complete verification.
-    • Traceability: The Thought -> Action -> Observation trace reveals the agent's
-      step-by-step decision-making process.
-"""
-
 import sys
 from typing import List, Optional
-
 if sys.platform == "win32":
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
-
 try:
     from rich.console import Console
     from rich.panel import Panel
@@ -33,11 +17,7 @@ try:
 except ImportError:
     _HAS_RICH = False
     _console = None
-
-
-# Width of the output box in characters for plain text fallback.
 _BOX_WIDTH = 68
-
 TOOL_BADGES = {
     "get_stock_data": ("📈", "Live Stocks (yfinance)"),
     "search_knowledge_base": ("📚", "Internal Knowledge Base (FAISS)"),
@@ -45,8 +25,6 @@ TOOL_BADGES = {
     "search_wikipedia": ("📖", "Wikipedia Encyclopedia"),
     "web_search": ("🌐", "Live Web Search (Tavily)"),
 }
-
-
 def get_tool_display_name(tool_name: str) -> str:
     """Return an icon + human readable name for a tool."""
     if tool_name in TOOL_BADGES:
@@ -54,20 +32,13 @@ def get_tool_display_name(tool_name: str) -> str:
         return f"{icon} {name}"
     return f"🔧 {tool_name}"
 
-
 def format_response(
     answer: str,
     tools_used: List[str],
     agent_steps: Optional[list] = None,
     duration_s: Optional[float] = None,
 ) -> str:
-    """
-    Render the agent's answer inside a clean bordered box with a tools-used footer.
-    Universal plain-text rendering that works on all Unicode terminals.
-    """
     lines: List[str] = []
-
-    # ── Answer box header ──────────────────────────────────────────────────
     lines.append("╔" + "═" * _BOX_WIDTH + "╗")
     header_title = "  ⚡ AGENT RESPONSE"
     if duration_s is not None:
@@ -78,7 +49,6 @@ def format_response(
     lines.append(answer)
     lines.append("")
 
-    # ── Tools / sources footer ─────────────────────────────────────────────
     if tools_used:
         badges = [get_tool_display_name(t) for t in tools_used]
         tools_str = " | ".join(badges)
@@ -103,15 +73,10 @@ def display_rich_response(
     duration_s: Optional[float] = None,
     model_name: Optional[str] = None,
 ) -> None:
-    """
-    Render formatted markdown and reasoning trace using Rich console.
-    Falls back to standard print if Rich is unavailable.
-    """
     if not _HAS_RICH or _console is None:
         print("\n" + format_response(answer, tools_used, agent_steps, duration_s))
         return
 
-    # Print reasoning steps if available and requested
     if show_trace and agent_steps:
         _console.print("\n[bold cyan]🧠 Agent Reasoning & Tool Activation Trace[/bold cyan]")
         for i, step in enumerate(agent_steps, start=1):
@@ -141,8 +106,6 @@ def display_rich_response(
                 _console.print(Panel(step_table, title=f"[bold]Step {i}[/bold]", border_style="cyan", expand=False))
             except Exception:
                 continue
-
-    # Format badges for title
     if tools_used:
         badge_text = " • ".join(get_tool_display_name(t) for t in tools_used)
     else:
@@ -159,10 +122,6 @@ def display_rich_response(
 
 
 def extract_tools_from_steps(agent_steps: list) -> List[str]:
-    """
-    Parse LangChain AgentExecutor intermediate steps to extract tool names.
-    Returns deduplicated list of tool names in invocation order.
-    """
     seen = set()
     tools: List[str] = []
 
@@ -178,11 +137,7 @@ def extract_tools_from_steps(agent_steps: list) -> List[str]:
 
     return tools
 
-
 def format_agent_trace(agent_steps: list) -> str:
-    """
-    Render the agent's full Thought -> Action -> Observation trace as plain text.
-    """
     if not agent_steps:
         return "(No intermediate steps recorded)"
 
