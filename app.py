@@ -14,6 +14,7 @@ import os
 import sys
 import time
 import json
+import traceback
 from typing import List, Dict, Any
 
 import streamlit as st
@@ -361,6 +362,7 @@ try:
         agent, tools, vector_store = get_agent_instance(st.session_state.config)
 except Exception as exc:
     st.error(f"Error initializing Agentic RAG system: {exc}")
+    st.code(traceback.format_exc(), language="python")
     st.stop()
 
 
