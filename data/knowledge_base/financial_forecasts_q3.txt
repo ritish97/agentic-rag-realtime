@@ -1,0 +1,60 @@
+================================================================================
+INTERNAL FINANCIAL VALUATION & EQUITY FORECAST REPORT (Q3/Q4)
+CONFIDENTIAL - FOR INTERNAL STRATEGY & PORTFOLIO ALLOCATION ONLY
+================================================================================
+
+1. EXECUTIVE SUMMARY & VALUATION TARGETS
+This report establishes our proprietary internal valuation models, discounted cash
+flow (DCF) intrinsic value targets, and forward guidance expectations for core equity
+holdings as of the current fiscal year.
+
+--------------------------------------------------------------------------------
+COMPANY: Apple Inc. (Ticker: AAPL)
+--------------------------------------------------------------------------------
+- Internal DCF Intrinsic Fair Value: $195.00 per share (Base Case: $190 - $205)
+- Q3 Internal Valuation Forecast: $185.00 - $192.50
+- 12-Month Price Target: $215.00
+- Sensitivity Analysis:
+  * Bull Case ($225.00): Accelerated Services revenue growth (>14% YoY), enterprise
+    AI adoption on device hardware, and China sales stabilization.
+  * Bear Case ($170.00): Lengthened upgrade cycle, regulatory pressure on App Store
+    margins, and supply chain cost escalation.
+- Portfolio Guidance: Maintain Overweight. Current market prices below $185 represent
+  favorable accumulation zones relative to internal fair value targets.
+
+--------------------------------------------------------------------------------
+COMPANY: Microsoft Corporation (Ticker: MSFT)
+--------------------------------------------------------------------------------
+- Internal DCF Intrinsic Fair Value: $435.00 per share (Base Case: $420 - $450)
+- Q3 Internal Valuation Forecast: $415.00 - $430.00
+- 12-Month Price Target: $465.00
+- Key Drivers: Cloud Azure run-rate acceleration, enterprise Copilot monetization,
+  and sustained commercial margin expansion (>44% operating margin).
+- Portfolio Guidance: Core holding, Overweight.
+
+--------------------------------------------------------------------------------
+COMPANY: NVIDIA Corporation (Ticker: NVDA)
+--------------------------------------------------------------------------------
+- Internal DCF Intrinsic Fair Value: $125.00 (split-adjusted)
+- Q3 Internal Valuation Forecast: $118.00 - $130.00
+- 12-Month Price Target: $145.00
+- Key Drivers: Data center GPU demand, Blackwell architecture ramp-up, and expanding
+  networking/InfiniBand attach rates.
+- Portfolio Guidance: Strategic Accumulation on dips below $115.00.
+
+--------------------------------------------------------------------------------
+COMPANY: Alphabet Inc. (Ticker: GOOGL)
+--------------------------------------------------------------------------------
+- Internal DCF Intrinsic Fair Value: $178.00 per share
+- Q3 Internal Valuation Forecast: $170.00 - $182.00
+- 12-Month Price Target: $195.00
+- Key Drivers: Search advertising resilience, Google Cloud profitability, and Gemini
+  infrastructure monetization.
+- Portfolio Guidance: Moderate Overweight.
+
+================================================================================
+RISK FACTORS & MACRO ASSUMPTIONS
+- Risk-free rate modeled at 4.25% (10-Year US Treasury benchmark).
+- Equity risk premium modeled at 5.0%.
+- Terminal growth rate assumption: 3.0% across all tier-1 tech firms.
+================================================================================

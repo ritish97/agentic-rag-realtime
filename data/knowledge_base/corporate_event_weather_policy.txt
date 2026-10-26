@@ -1,0 +1,42 @@
+================================================================================
+CORPORATE EVENT OPERATIONS & WEATHER CONTINGENCY POLICY
+STANDARD OPERATING PROCEDURE: SOP-OPS-042
+================================================================================
+
+1. PURPOSE & APPLICABILITY
+This policy governs all corporate gatherings, executive retreats, client summits,
+and outdoor company events. All event directors and venue coordinators must evaluate
+local meteorological forecasts 48 hours, 24 hours, and 4 hours prior to scheduled
+commencement.
+
+2. PRECIPITATION & RAIN THRESHOLDS
+- Green Condition (Go): Precipitation probability < 25%, rainfall rate < 1 mm/hr.
+  Outdoor operations proceed as planned.
+- Yellow Condition (Caution): Precipitation probability 25% - 49% or light drizzle.
+  Tent awnings and covered walkways must be pre-deployed; audiovisual gear must be
+  water-shielded.
+- Red Condition (Mandatory Relocation): Precipitation probability >= 50% or active
+  rain forecast. Event coordinator must execute relocation to the indoor auditorium
+  or designated pavilion at least 3 hours prior to guest arrival.
+
+3. WIND SPEED LIMITS
+- Sustained wind speed <= 25 km/h: Safe for all standard canopies, signage, and outdoor seating.
+- Sustained wind speed 26 - 40 km/h: Inflatables and temporary banner towers must be
+  lowered. Anchored high-peak tension tents permitted with reinforced weights.
+- Sustained wind speed > 40 km/h or gusts > 50 km/h: IMMEDIATE outdoor shutdown.
+  All activities must transition indoors immediately due to structural hazard.
+
+4. TEMPERATURE EXTREMES & HEAT SAFETY
+- High Temperature Protocol:
+  * Heat Index > 32°C (90°F): Shaded hydration stations mandatory every 20 meters.
+    Outdoor duration capped at 90 continuous minutes.
+  * Heat Index > 38°C (100°F): Outdoor gatherings cancelled; strictly indoor operations.
+- Cold Temperature Protocol:
+  * Ambient temperature < 10°C: Industrial patio heaters deployed for outdoor receptions.
+  * Ambient temperature < 4°C: Outdoor activities prohibited; transition to fireplace lounge.
+
+5. DECISION AUTHORITY & NOTIFICATION
+The Lead Event Coordinator and Regional Operations Manager hold unilateral authority
+to execute weather contingencies. Notification must be broadcasted via company SMS
+and email alerts no later than 2 hours before the start time.
+================================================================================

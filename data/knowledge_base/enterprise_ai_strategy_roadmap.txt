@@ -1,0 +1,36 @@
+================================================================================
+ENTERPRISE ARTIFICIAL INTELLIGENCE STRATEGY & AGENTIC ARCHITECTURE
+STRATEGIC PLANNING & GOVERNANCE DIRECTIVE
+================================================================================
+
+1. EXECUTIVE VISION
+Our enterprise AI strategy focuses on deploying autonomous Agentic RAG systems
+that unify internal unstructured corporate knowledge with real-time operational
+data streams. This eliminates knowledge silos and accelerates strategic decisions.
+
+2. CORE PILLARS OF AGENTIC ARCHITECTURE
+- Dynamic Tool Orchestration: Moving away from static retrieval pipelines to
+  autonomous agents powered by function calling. The agent inspects question intent
+  and dynamically activates tools (Knowledge Retrieval, Financial APIs, Web Search,
+  Meteorological feeds, Encyclopedia).
+- Multi-Step Reasoning: Empowering the agent with ReAct loops (Reasoning + Acting +
+  Observing) so complex queries requiring cross-functional synthesis are solved
+  cohesively.
+- Grounded Hallucination Prevention: Strict provenance citation rules require the
+  agent to state the specific document chunks or API sources for every factual assertion.
+
+3. DATA GOVERNANCE & PRIVACY COMPLIANCE
+- Tier-1 Protected Documents: Internal board minutes, unannounced financial projections,
+  and proprietary code must be indexed exclusively in local, air-gapped vector stores
+  (e.g., local FAISS or ChromaDB) and never transmitted to external third-party search APIs.
+- Real-Time Public Tools: Queries routed to public search engines (Tavily, Yahoo Finance,
+  Wikipedia) must strictly contain sanitized search tokens, stripping any internal
+  client identifiers or proprietary project codenames.
+
+4. MODEL SELECTION & INFRASTRUCTURE TIERING
+- Production Reasoning Tier: GPT-4o / GPT-4 for complex multi-tool reasoning and synthesis.
+- Low-Latency Interactive Tier: GPT-4o-mini / Groq LLaMA-3 for high-throughput user interfaces.
+- Local Embeddings: All document chunk vectorization is conducted locally using
+  sentence-transformers/all-MiniLM-L6-v2 to guarantee zero external embedding API cost
+  and complete data privacy.
+================================================================================
