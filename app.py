@@ -357,7 +357,8 @@ with st.sidebar:
 # Initialize Agent Instance
 # -----------------------------------------------------------------------------
 try:
-    agent, tools, vector_store = get_agent_instance(st.session_state.config)
+    with st.spinner("⚡ Initializing tools and knowledge base..."):
+        agent, tools, vector_store = get_agent_instance(st.session_state.config)
 except Exception as exc:
     st.error(f"Error initializing Agentic RAG system: {exc}")
     st.stop()
@@ -554,19 +555,25 @@ with tab_kb:
 
         if doc_infos:
             for d in doc_infos:
-                with st.expander(f"📄 {d['name']} ({d['size_kb']:.1f} KB)", expanded=False):
-                    try:
-                        with open(d["path"], "r", encoding="utf-8", errors="replace") as f_preview:
-                            content = f_preview.read()
-                            st.text_area("File Content", value=content, height=180, disabled=True)
-                    except Exception as e:
-                        st.caption(f"Preview unavailable: {e}")
+                ext_icon = "📄" if d["extension"] in [".txt", ".md"] else "📑"
+                with st.expander(f"{ext_icon} {d['name']} ({d['size_kb']:.1f} KB)", expanded=False):
+                    if d["extension"] in [".txt", ".md"]:
+                        try:
+                            with open(d["path"], "r", encoding="utf-8", errors="replace") as f_preview:
+                                content = f_preview.read(2500)
+                                if len(content) >= 2500:
+                                    content += "\n... (truncated for preview)"
+                                st.text_area("File Preview", value=content, height=160, disabled=True, key=f"preview_{d['name']}")
+                        except Exception as e:
+                            st.caption(f"Preview unavailable: {e}")
+                    else:
+                        st.info(f"📑 PDF Document ({d['size_kb']:.1f} KB) — Indexed into FAISS vector chunks for semantic search.")
         else:
             st.info("No documents found in knowledge base. Upload files on the right.")
 
         st.markdown("#### 🔄 Vector Store Maintenance")
-        if st.button("Re-index Knowledge Base Now", use_container_width=True):
-            with st.spinner("Splitting documents, computing local MiniLM embeddings, and persisting FAISS index..."):
+        if st.button("Re-index Knowledge Base Now", use_container_width=True, key="btn_reindex_kb"):
+            with st.spinner("Processing documents and rebuilding FAISS vector index..."):
                 get_vector_store(kb_path, force_reindex=True)
                 st.success("FAISS index successfully rebuilt!")
                 st.rerun()
@@ -577,34 +584,41 @@ with tab_kb:
             "Drop .txt, .pdf, or .md files to add to the knowledge base",
             type=["txt", "pdf", "md"],
             accept_multiple_files=True,
+            key="kb_file_uploader",
         )
         if uploaded_files:
-            for up in uploaded_files:
-                save_dest = os.path.join(kb_path, up.name)
-                with open(save_dest, "wb") as f_out:
-                    f_out.write(up.getbuffer())
-                st.success(f"Saved: {up.name}")
-            st.info("Click 'Re-index Knowledge Base Now' on the left to embed new files into FAISS.")
+            if st.button("📥 Save Uploaded Documents", use_container_width=True, key="btn_save_docs"):
+                with st.spinner("Saving uploaded documents..."):
+                    for up in uploaded_files:
+                        save_dest = os.path.join(kb_path, up.name)
+                        with open(save_dest, "wb") as f_out:
+                            f_out.write(up.getbuffer())
+                        st.success(f"Saved: {up.name}")
+                    st.info("Click 'Re-index Knowledge Base Now' on the left to embed new files into FAISS.")
 
     st.markdown("---")
     st.markdown("#### 🔍 Semantic Search Sandbox")
     st.caption("Inspect what the FAISS index retrieves for any test query with similarity scores.")
 
-    col_s1, col_s2 = st.columns([3, 1])
-    with col_s1:
-        test_search_query = st.text_input("Semantic Query", value="AAPL valuation forecast")
-    with col_s2:
-        top_k = st.slider("Top Chunks", min_value=1, max_value=8, value=3)
+    # Use a form so the heavy embedding search ONLY executes when submitted, not on tab switch or slider drag!
+    with st.form("kb_sandbox_form"):
+        col_s1, col_s2 = st.columns([3, 1])
+        with col_s1:
+            sandbox_query = st.text_input("Semantic Query", value="AAPL valuation forecast", key="sb_query")
+        with col_s2:
+            sandbox_top_k = st.slider("Top Chunks", min_value=1, max_value=6, value=3, key="sb_k")
+        submit_search = st.form_submit_button("🔍 Run Semantic Search", use_container_width=True)
 
-    if test_search_query:
-        search_results = search_knowledge_base_with_metadata(test_search_query, vector_store, k=top_k)
-        if search_results:
-            for idx, res in enumerate(search_results, 1):
-                score_str = f" | Score: {res['score']:.4f}" if res.get("score") is not None else ""
-                st.markdown(f"**Chunk {idx}** — Source: `{res['source']}`{score_str}")
-                st.markdown(f'<div class="result-chunk">{res["content"]}</div>', unsafe_allow_html=True)
-        else:
-            st.warning("No matches found.")
+    if submit_search and sandbox_query.strip():
+        with st.spinner("Running semantic similarity query..."):
+            search_results = search_knowledge_base_with_metadata(sandbox_query, vector_store, k=sandbox_top_k)
+            if search_results:
+                for idx, res in enumerate(search_results, 1):
+                    score_str = f" | Score: {res['score']:.4f}" if res.get("score") is not None else ""
+                    st.markdown(f"**Chunk {idx}** — Source: `{res['source']}`{score_str}")
+                    st.markdown(f'<div class="result-chunk">{res["content"]}</div>', unsafe_allow_html=True)
+            else:
+                st.warning("No matches found for that query.")
 
 
 # -----------------------------------------------------------------------------

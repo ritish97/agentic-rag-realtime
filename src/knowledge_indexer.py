@@ -36,7 +36,16 @@ def _get_embeddings() -> HuggingFaceEmbeddings:
     """Return a cached HuggingFace embedding model instance."""
     global _CACHED_EMBEDDINGS
     if _CACHED_EMBEDDINGS is None:
-        _CACHED_EMBEDDINGS = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+        try:
+            _CACHED_EMBEDDINGS = HuggingFaceEmbeddings(
+                model_name=EMBEDDING_MODEL_NAME,
+                model_kwargs={"device": "cpu"},
+            )
+        except Exception:
+            _CACHED_EMBEDDINGS = HuggingFaceEmbeddings(
+                model_name=EMBEDDING_MODEL_NAME,
+                model_kwargs={"device": "cpu", "local_files_only": True},
+            )
     return _CACHED_EMBEDDINGS
 
 
